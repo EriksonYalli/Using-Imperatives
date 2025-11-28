@@ -37,7 +37,7 @@
 
 ---
 
-## Project Stack
+## 🔧 Project Stack
 
 - **Backend**: Java 17, Spring Boot 3.1.5
 - **Reactive**: Spring WebFlux
@@ -48,13 +48,13 @@
 
 ---
 
-## Project Purpose
+## ✅ Project Purpose
 
 API reactiva que expone endpoints y persiste datos en PostgreSQL utilizando R2DBC (no bloqueante), ideal para servicios de alto rendimiento y operaciones I/O intensivas.
 
 ---
 
-## Setup Instructions (Imperatives)
+## 🛠️ Setup Instructions (Imperatives)
 
 - **Clonar el repositorio**:
   - `git clone https://github.com/YourOrg/cepreb.git`
@@ -77,13 +77,13 @@ API reactiva que expone endpoints y persiste datos en PostgreSQL utilizando R2DB
 
 ---
 
-## How to Use the App (Advice with “should”)
+## 🧩 How to Use the App (Advice with “should”)
 
 - You should abrir `http://localhost:5001` al correr local con `SERVER_PORT=5001`.
 - You should usar `http://localhost:5003` si levantas con Docker Compose.
 - You should habilitar CORS si tu frontend va a consumir el API.
 
-### Endpoints de ejemplo
+### 📚 Endpoints de ejemplo
 
 | Método | Ruta             | Descripción                             |
 |--------|------------------|-----------------------------------------|
@@ -94,7 +94,7 @@ API reactiva que expone endpoints y persiste datos en PostgreSQL utilizando R2DB
 
 ---
 
-## Future Plans (Advice & Suggestions)
+## 🎯 Future Plans (Advice & Suggestions)
 
 - We should parametrizar completamente `spring.r2dbc.url` y usar perfiles (`application-dev.yml`, `application-prod.yml`).
 - We should añadir migraciones de base de datos con Flyway/Liquibase (R2DBC compatible).
@@ -105,19 +105,26 @@ API reactiva que expone endpoints y persiste datos en PostgreSQL utilizando R2DB
 
 ---
 
-## Repository Structure
+## 📁 Repository Structure
 
-- **/Using-Imperatives**
-  - `pom.xml` (Spring Boot 3.1.5, Java 17, WebFlux, R2DBC, Lombok)
-  - `Dockerfile` (multi-stage build con Maven 3.9.6 y Temurin 17)
-  - `docker-compose.yml` (servicio `vg-backend`, variables `SPRING_R2DBC_*`, puerto 5003)
-  - `src/main/java/pe/edu/vallegrande/configurationservice/configurationservice.java` (clase main)
-  - `src/main/resources/application.yml` (server.port 5001; config R2DBC)
-  - `README.md` (este documento)
+```text
+/cepreb
+├── Using-Imperatives/          # Spring Boot WebFlux + R2DBC backend
+│   ├── pom.xml                 # Dependencias y configuración (Java 17, Boot 3.1.5)
+│   ├── Dockerfile              # Build multi-stage para contenedor
+│   ├── docker-compose.yml      # Servicio backend y variables SPRING_R2DBC_*
+│   ├── src/
+│   │   ├── main/java/pe/edu/vallegrande/configurationservice/
+│   │   │   └── configurationservice.java   # Clase main
+│   │   └── main/resources/application.yml  # server.port y R2DBC config
+│   └── README.md               # ← You are here
+├── docs/                       # Documentación y diagramas (opcional)
+└── .env.example                # Plantilla de variables de entorno (opcional)
+```
 
 ---
 
-## Contributing (Imperatives & Advice)
+## 🧑‍🏫 Contributing (Imperatives & Advice)
 
 - Fork del repo.
 - Crear una rama de feature:
@@ -128,7 +135,7 @@ API reactiva que expone endpoints y persiste datos en PostgreSQL utilizando R2DB
 
 ---
 
-## Deployment Requirements (Must & Need To)
+## 🚀 Deployment Requirements (Must & Need To)
 
 - You must definir variables de entorno seguras (no hardcode):
   - `SPRING_R2DBC_URL`
@@ -143,7 +150,7 @@ API reactiva que expone endpoints y persiste datos en PostgreSQL utilizando R2DB
 
 ---
 
-## Best Practices & Tips
+## 💡 Best Practices & Tips
 
 - You should escribir tests para WebFlux, servicios y repositorios R2DBC.
 - You should documentar endpoints y modelos con OpenAPI/Swagger.
@@ -152,7 +159,7 @@ API reactiva que expone endpoints y persiste datos en PostgreSQL utilizando R2DB
 
 ---
 
-## Questions & Support
+## 📞 Questions & Support
 
 - Abrir un issue en este repositorio.
 - Etiquetar a los líderes del proyecto para temas urgentes.
@@ -160,6 +167,6 @@ API reactiva que expone endpoints y persiste datos en PostgreSQL utilizando R2DB
 
 ---
 
-### Notas de seguridad
+### 🔒 Notas de seguridad
 
 - Si existen credenciales en archivos de configuración, muévelas a variables de entorno cuanto antes.
