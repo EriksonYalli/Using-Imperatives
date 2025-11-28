@@ -1,95 +1,165 @@
-📘 CEPREB – Technical Overview
-Imperatives · Should · Must · Need To — Assignment T03
-🔧 Project Stack
+<div align="center">
+  <h1>CEPREB – Technical Overview</h1>
+  <p><b>Backend reactivo con Spring Boot WebFlux + R2DBC (PostgreSQL)</b></p>
+  <p>
+    <img alt="Java 17" src="https://img.shields.io/badge/Java-17-007396?logo=java&logoColor=white">
+    <img alt="Spring Boot" src="https://img.shields.io/badge/Spring%20Boot-3.1.5-6DB33F?logo=springboot&logoColor=white">
+    <img alt="WebFlux" src="https://img.shields.io/badge/WebFlux-reactive-6DB33F">
+    <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-R2DBC-336791?logo=postgresql&logoColor=white">
+    <img alt="Maven" src="https://img.shields.io/badge/Maven-wrapper-C71A36?logo=apachemaven&logoColor=white">
+    <img alt="Docker" src="https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white">
+  </p>
+  <p>
+    <a href="#project-stack">Stack</a> ·
+    <a href="#project-purpose">Purpose</a> ·
+    <a href="#setup-instructions-imperatives">Setup</a> ·
+    <a href="#how-to-use-the-app-advice-with-should">Uso</a> ·
+    <a href="#future-plans-advice--suggestions">Roadmap</a> ·
+    <a href="#repository-structure">Estructura</a>
+  </p>
+</div>
 
-Backend: Java 17 · Spring Boot WebFlux · Spring Data R2DBC
-Database: PostgreSQL (Neon, vía R2DBC)
-Documentation: Springdoc OpenAPI 3 (Swagger UI)
-Build Tool: Maven Wrapper (mvnw.cmd)
+---
 
-✅ Project Purpose
+## Tabla de Contenidos
 
-CEPREB is a backend service designed to manage municipalities (tenants).
-It provides:
+- **[Project Stack](#project-stack)**
+- **[Project Purpose](#project-purpose)**
+- **[Setup Instructions (Imperatives)](#setup-instructions-imperatives)**
+- **[How to Use the App (Advice with “should”)](#how-to-use-the-app-advice-with-should)**
+- **[Future Plans (Advice & Suggestions)](#future-plans-advice--suggestions)**
+- **[Repository Structure](#repository-structure)**
+- **[Contributing (Imperatives & Advice)](#contributing-imperatives--advice)**
+- **[Deployment Requirements (Must & Need To)](#deployment-requirements-must--need-to)**
+- **[Best Practices & Tips](#best-practices--tips)**
+- **[Questions & Support](#questions--support)**
+- **[Notas de seguridad](#notas-de-seguridad)**
 
-Reactive CRUD endpoints
+---
 
-Validation utilities
+## Project Stack
 
-A scalable multi-tenant configuration system
+- **Backend**: Java 17, Spring Boot 3.1.5
+- **Reactive**: Spring WebFlux
+- **Data**: Spring Data R2DBC
+- **Database**: PostgreSQL (Neon) vía R2DBC
+- **Build**: Maven Wrapper
+- **Containers**: Docker + Docker Compose
 
-🛠️ Setup Instructions (Imperatives)
-1. Clone the repository
-git clone https://cepreb.git
+---
 
-2. Navigate into the backend
-cd back/vg-ms-tenantmanagmentservice
+## Project Purpose
 
-3. Set environment variables (PowerShell – Windows)
-$env:SERVER_PORT = '5001'
-$env:DB_URL = 'r2dbc:postgresql://<HOST>:5432/<DB_NAME>?sslmode=require'
-$env:DB_USERNAME = '<DB_USER>'
-$env:DB_PASSWORD = '<DB_PASSWORD>'
+API reactiva que expone endpoints y persiste datos en PostgreSQL utilizando R2DBC (no bloqueante), ideal para servicios de alto rendimiento y operaciones I/O intensivas.
 
-4. Run Spring Boot
-./mvnw.cmd spring-boot:run
+---
 
-5. Build JAR
-./mvnw.cmd -DskipTests package
-java -jar .\target\vg-backend-0.0.1-SNAPSHOT.jar
+## Setup Instructions (Imperatives)
 
-📝 Neon PostgreSQL (Required)
+- **Clonar el repositorio**:
+  - `git clone https://github.com/YourOrg/cepreb.git`
+- **Entrar al backend**:
+  - `cd cepreb/Using-Imperatives`
+- **Construir (PowerShell)**:
+  - `./mvnw.cmd clean package`
+- **Configurar variables de entorno (PowerShell)**:
+  - `$env:SPRING_R2DBC_URL = 'r2dbc:postgresql://<USER>:<PASS>@<HOST>:5432/<DB>?sslMode=VERIFY_FULL'`
+  - `$env:SPRING_R2DBC_USERNAME = '<USER>'`
+  - `$env:SPRING_R2DBC_PASSWORD = '<PASS>'`
+  - `$env:SERVER_PORT = '5001'`  (por defecto 5001)
+- **Ejecutar la app**:
+  - `./mvnw.cmd spring-boot:run`
+- **Levantar con Docker Compose**:
+  - `docker compose up --build`
+  - El compose mapea por defecto `5003:5003` (ajústalo si es necesario).
 
-Use SSL:
+> Importante: evita credenciales hardcodeadas en `application.yml` y `docker-compose.yml`. Usa variables de entorno o un gestor de secretos.
 
-?sslmode=require
+---
 
+## How to Use the App (Advice with “should”)
 
-Example:
+- You should abrir `http://localhost:5001` al correr local con `SERVER_PORT=5001`.
+- You should usar `http://localhost:5003` si levantas con Docker Compose.
+- You should habilitar CORS si tu frontend va a consumir el API.
 
-$env:DB_URL = 'r2dbc:postgresql://ep-neon-pooler.neon.tech:5432/neondb?sslmode=require'
+### Endpoints de ejemplo
 
-📁 Repository Structure
-/back
-└── vg-ms-tenantmanagmentservice
-    ├── src/main/java/...
-    ├── resources/application.yml
-    ├── schema.sql
-    ├── pom.xml
-    ├── README.md
+| Método | Ruta             | Descripción                             |
+|--------|------------------|-----------------------------------------|
+| GET    | `/api/hello`     | Endpoint de prueba/estado del servicio. |
+| POST   | `/api/people`    | Crea un recurso Person (JSON body).     |
 
-🔗 Key API Endpoints
-CRUD
-GET    /api/municipalities
-GET    /api/municipalities/{id}
-POST   /api/municipalities
-PUT    /api/municipalities/{id}
-PATCH  /api/municipalities/{id}
-DELETE /api/municipalities/{id}
+> Tip: Usa `curl`, Postman o Thunder Client para validar rápidamente el contrato de los endpoints.
 
-Validation
-GET /api/municipalities/validate/tax-id/{taxId}
-GET /api/municipalities/validate/ubigeo-code/{ubigeoCode}
+---
 
-Swagger
-/swagger-ui.html
-/api-docs
+## Future Plans (Advice & Suggestions)
 
-🧪 Local Testing
+- We should parametrizar completamente `spring.r2dbc.url` y usar perfiles (`application-dev.yml`, `application-prod.yml`).
+- We should añadir migraciones de base de datos con Flyway/Liquibase (R2DBC compatible).
+- We should integrar observabilidad (Spring Boot Actuator, Prometheus, logs estructurados).
+- We should incrementar test coverage (WebFlux, servicios y repositorios R2DBC).
+- We should asegurar SSL con Neon y rotación de secretos (.env local + secret manager en despliegue).
+- We should documentar el contrato de `POST /api/people` (payload, validaciones, respuestas) con OpenAPI/Swagger.
 
-Check API health:
+---
 
-Invoke-WebRequest http://localhost:5001/actuator/health
+## Repository Structure
 
+- **/Using-Imperatives**
+  - `pom.xml` (Spring Boot 3.1.5, Java 17, WebFlux, R2DBC, Lombok)
+  - `Dockerfile` (multi-stage build con Maven 3.9.6 y Temurin 17)
+  - `docker-compose.yml` (servicio `vg-backend`, variables `SPRING_R2DBC_*`, puerto 5003)
+  - `src/main/java/pe/edu/vallegrande/configurationservice/configurationservice.java` (clase main)
+  - `src/main/resources/application.yml` (server.port 5001; config R2DBC)
+  - `README.md` (este documento)
 
-List municipalities:
+---
 
-Invoke-WebRequest http://localhost:5001/api/municipalities
+## Contributing (Imperatives & Advice)
 
-✔️ Best Practices
+- Fork del repo.
+- Crear una rama de feature:
+  - `git checkout -b feature/tu-feature`
+- Implementar, probar y lint localmente.
+- Abrir un Pull Request con resumen y descripción claros.
+- You should añadir “Fixes #<issue-number>” si está relacionado a un issue.
 
-Use environment variables for secrets
+---
 
-Create WebTestClient unit tests
+## Deployment Requirements (Must & Need To)
 
-Document new endpoints
+- You must definir variables de entorno seguras (no hardcode):
+  - `SPRING_R2DBC_URL`
+  - `SPRING_R2DBC_USERNAME`
+  - `SPRING_R2DBC_PASSWORD`
+  - `SERVER_PORT`
+- You need to habilitar CORS en la configuración de Spring para el dominio del frontend.
+- You must usar perfiles y secretos seguros en producción (no commitear `.env`).
+- You must construir la imagen o usar Compose para desplegar:
+  - `docker build -t cepreb-backend .`
+  - `docker compose up --build`
+
+---
+
+## Best Practices & Tips
+
+- You should escribir tests para WebFlux, servicios y repositorios R2DBC.
+- You should documentar endpoints y modelos con OpenAPI/Swagger.
+- You should usar `./mvnw.cmd clean` antes de empaquetar.
+- You should extraer valores sensibles a variables de entorno o un vault.
+
+---
+
+## Questions & Support
+
+- Abrir un issue en este repositorio.
+- Etiquetar a los líderes del proyecto para temas urgentes.
+- Unirse al canal de chat del equipo para colaboración en tiempo real.
+
+---
+
+### Notas de seguridad
+
+- Si existen credenciales en archivos de configuración, muévelas a variables de entorno cuanto antes.
