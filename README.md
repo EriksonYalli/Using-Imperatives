@@ -1,68 +1,66 @@
-CEPREB – Technical Overview
-
-(Imperatives, Should, Must, Need To – Assignment T03)
-
+📘 CEPREB – Technical Overview
+(Imperatives · Should · Must · Need To — Assignment T03)
 🔧 Project Stack
-
-Backend: Java 17 (Spring Boot WebFlux, Spring Data R2DBC)
-
-Database: PostgreSQL (Neon) via R2DBC
-
-Documentation: Springdoc OpenAPI 3 (Swagger UI)
-
-Build Tool: Maven Wrapper (mvnw.cmd)
-
+Component	Technology
+Backend	Java 17 · Spring Boot WebFlux · Spring Data R2DBC
+Database	PostgreSQL (Neon) via R2DBC
+Documentation	Springdoc OpenAPI 3 (Swagger UI)
+Build Tool	Maven Wrapper (mvnw.cmd)
 ✅ Project Purpose
 
-CEPREB is a backend service designed to manage municipalities (tenants). It provides reactive CRUD endpoints, validation tools, and scalable configuration features to support multi-tenant municipal platforms.
+CEPREB is a backend service designed to manage municipalities (tenants).
+It provides:
+
+Reactive CRUD endpoints
+
+Validation utilities
+
+A scalable multi-tenant configuration system
 
 🛠️ Setup Instructions (Imperatives)
 
 Follow these steps to run the project locally:
 
-1. Clone the repository
-git clone https://<your-repo-host>/<your-org>/<cepreb>.git
+1️⃣ Clone the repository
+git clone https://<your-repo-host>/<your-org>/cepreb.git
 
-2. Navigate into the backend service
+2️⃣ Navigate into the backend
 cd back/vg-ms-tenantmanagmentservice
 
-3. Set environment variables (PowerShell – Windows)
+3️⃣ Set environment variables (PowerShell – Windows)
 $env:SERVER_PORT = '5001'
 $env:DB_URL = 'r2dbc:postgresql://<HOST>:5432/<DB_NAME>?sslmode=require'
 $env:DB_USERNAME = '<DB_USER>'
 $env:DB_PASSWORD = '<DB_PASSWORD>'
 
-4. Run Spring Boot (development mode)
+4️⃣ Run Spring Boot in dev mode
 ./mvnw.cmd spring-boot:run
 
-5. Alternatively, build the JAR and run it
+5️⃣ Build the JAR & run it
 ./mvnw.cmd -DskipTests package
 java -jar .\target\vg-backend-0.0.1-SNAPSHOT.jar
 
-Neon PostgreSQL Note
+📝 Neon PostgreSQL Notice
 
-You must include ?sslmode=require in the R2DBC URL.
-Example:
+You must include ?sslmode=require in your R2DBC connection URL.
 
 $env:DB_URL = 'r2dbc:postgresql://ep-your-neon-pooler.neon.tech:5432/neondb?sslmode=require'
 
 🧩 How to Use the API (Should)
 
-You should access Swagger UI here:
+You should access Swagger UI:
 👉 http://localhost:5001/swagger-ui.html
 
-You should start by creating a municipality using:
+You should begin by creating a municipality:
 POST /api/municipalities
 
-You should validate data using:
+You should validate information via:
 
-/api/municipalities/validate/tax-id/{taxId}
+GET /api/municipalities/validate/tax-id/{taxId}
+GET /api/municipalities/validate/ubigeo-code/{ubigeoCode}
 
-/api/municipalities/validate/ubigeo-code/{ubigeoCode}
 
-You should always use UUIDs for IDs to maintain consistency.
-
-You should review 4xx/5xx responses to check validation details.
+You should always use UUIDs as entity identifiers.
 
 📁 Repository Structure
 /back
@@ -85,7 +83,7 @@ You should review 4xx/5xx responses to check validation details.
 
 🚀 Deployment Requirements (Must & Need To)
 
-You must configure these environment variables in any environment:
+You must configure these environment variables:
 
 SERVER_PORT
 
@@ -97,67 +95,54 @@ DB_PASSWORD
 
 You must use a valid R2DBC PostgreSQL connection string.
 
-You need to enable CORS with your frontend domain:
+You need to enable CORS for the frontend:
 
-Dev: http://localhost:5173
+Environment	URL
+Dev	http://localhost:5173
+Prod	your final domain
 
-Prod: your real domain
-
-You must secure actuator endpoints before deployment.
+You must secure actuator endpoints (/actuator/**) before deployment.
 
 🔗 Key API Endpoints
 CRUD
-
-GET /api/municipalities
-
-GET /api/municipalities/{id}
-
-POST /api/municipalities
-
-PUT /api/municipalities/{id}
-
-PATCH /api/municipalities/{id}
-
+GET    /api/municipalities
+GET    /api/municipalities/{id}
+POST   /api/municipalities
+PUT    /api/municipalities/{id}
+PATCH  /api/municipalities/{id}
 DELETE /api/municipalities/{id}
 
 Validation
-
 GET /api/municipalities/validate/tax-id/{taxId}
-
 GET /api/municipalities/validate/ubigeo-code/{ubigeoCode}
 
 API Docs
-
 /swagger-ui.html
-
 /api-docs
 
 🧪 Local Testing (Imperatives)
-1. Check health
+✔️ Check API Health
 Invoke-WebRequest http://localhost:5001/actuator/health
 
-2. List municipality records
+✔️ List municipalities
 Invoke-WebRequest http://localhost:5001/api/municipalities
 
-3. Create a new municipality
+✔️ Create a new municipality
 Invoke-RestMethod -Method POST -Uri http://localhost:5001/api/municipalities -ContentType 'application/json' -Body '{"name":"Test","ubigeoCode":"123456","department":"DEP","province":"PROV","district":"DIST","ruc":"12345678901"}'
 
 💡 Best Practices (Should)
 
-You should store secrets in environment variables, not Git.
+You should store secrets in environment variables.
 
-You should add unit tests with WebTestClient for controllers.
+You should write WebTestClient unit tests.
 
-You should document any new endpoints in Swagger or this README.
+You should document new endpoints in Swagger & README.
 
-You should run:
+You should build before deployment:
 
 mvn -q -DskipTests package
 
-
-before deployment.
-
-🧑‍🏫 Contributing (Imperatives)
+🧑‍🏫 Contributing Instructions (Imperatives)
 
 Fork the repository.
 
@@ -170,12 +155,12 @@ Implement and test your changes.
 
 Submit a Pull Request with a clear explanation.
 
-Reference issues:
+Reference an issue:
 
 Fixes #<issue-number>
 
 📞 Support
 
-Open an issue in the repository or contact the maintainers.
+Open an Issue in the repository or contact the maintainers.
 
 ✔️ CEPREB – Clean, Scalable & Reactive. Ready for Production.
