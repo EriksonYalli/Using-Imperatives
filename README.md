@@ -1,6 +1,7 @@
 <div align="center">
-  <h1>CEPREB – Technical Overview</h1>
-  <p><b>Backend reactivo con Spring Boot WebFlux + R2DBC (PostgreSQL)</b></p>
+  <img alt="cepreb – Technical Overview" src="https://capsule-render.vercel.app/api?type=rounded&color=gradient&height=160&text=cepreb%20%E2%80%93%20Technical%20Overview&fontSize=56&fontAlign=50&fontAlignY=50&fontColor=ffffff" />
+  <h3>Service: vg-ms-tenantmanagmentservice</h3>
+  <p><b>Reactive backend with Spring Boot WebFlux + R2DBC (PostgreSQL)</b></p>
   <p>
     <img alt="Java 17" src="https://img.shields.io/badge/Java-17-007396?logo=java&logoColor=white">
     <img alt="Spring Boot" src="https://img.shields.io/badge/Spring%20Boot-3.1.5-6DB33F?logo=springboot&logoColor=white">
@@ -13,15 +14,15 @@
     <a href="#project-stack">Stack</a> ·
     <a href="#project-purpose">Purpose</a> ·
     <a href="#setup-instructions-imperatives">Setup</a> ·
-    <a href="#how-to-use-the-app-advice-with-should">Uso</a> ·
+    <a href="#how-to-use-the-app-advice-with-should">Usage</a> ·
     <a href="#future-plans-advice--suggestions">Roadmap</a> ·
-    <a href="#repository-structure">Estructura</a>
+    <a href="#repository-structure">Structure</a>
   </p>
 </div>
 
 ---
 
-## Tabla de Contenidos
+## Table of Contents
 
 - **[Project Stack](#project-stack)**
 - **[Project Purpose](#project-purpose)**
@@ -33,7 +34,7 @@
 - **[Deployment Requirements (Must & Need To)](#deployment-requirements-must--need-to)**
 - **[Best Practices & Tips](#best-practices--tips)**
 - **[Questions & Support](#questions--support)**
-- **[Notas de seguridad](#notas-de-seguridad)**
+- **[Security Notes](#security-notes)**
 
 ---
 
@@ -42,7 +43,7 @@
 - **Backend**: Java 17, Spring Boot 3.1.5
 - **Reactive**: Spring WebFlux
 - **Data**: Spring Data R2DBC
-- **Database**: PostgreSQL (Neon) vía R2DBC
+- **Database**: PostgreSQL (Neon) via R2DBC
 - **Build**: Maven Wrapper
 - **Containers**: Docker + Docker Compose
 
@@ -50,58 +51,64 @@
 
 ## ✅ Project Purpose
 
-API reactiva que expone endpoints y persiste datos en PostgreSQL utilizando R2DBC (no bloqueante), ideal para servicios de alto rendimiento y operaciones I/O intensivas.
+Reactive API that exposes endpoints and persists data in PostgreSQL using R2DBC (non‑blocking). It fits high‑throughput, I/O‑intensive services.
 
 ---
 
 ## 🛠️ Setup Instructions (Imperatives)
 
-- **Clonar el repositorio**:
+- **Clone the repository**:
   - `git clone https://github.com/YourOrg/cepreb.git`
-- **Entrar al backend**:
+- **Go to the backend**:
   - `cd cepreb/Using-Imperatives`
-- **Construir (PowerShell)**:
+- **Build (PowerShell)**:
   - `./mvnw.cmd clean package`
-- **Configurar variables de entorno (PowerShell)**:
+- **Set environment variables (PowerShell)**:
   - `$env:SPRING_R2DBC_URL = 'r2dbc:postgresql://<USER>:<PASS>@<HOST>:5432/<DB>?sslMode=VERIFY_FULL'`
   - `$env:SPRING_R2DBC_USERNAME = '<USER>'`
   - `$env:SPRING_R2DBC_PASSWORD = '<PASS>'`
-  - `$env:SERVER_PORT = '5001'`  (por defecto 5001)
-- **Ejecutar la app**:
+  - `$env:SERVER_PORT = '5001'`  (default 5001)
+- **Run the app**:
   - `./mvnw.cmd spring-boot:run`
-- **Levantar con Docker Compose**:
+- **Run with Docker Compose**:
   - `docker compose up --build`
-  - El compose mapea por defecto `5003:5003` (ajústalo si es necesario).
+  - Default port mapping is `5003:5003` (adjust as needed).
 
-> Importante: evita credenciales hardcodeadas en `application.yml` y `docker-compose.yml`. Usa variables de entorno o un gestor de secretos.
+> Important: avoid hardcoded credentials in `application.yml` and `docker-compose.yml`. Prefer environment variables or a secrets manager.
 
 ---
 
 ## 🧩 How to Use the App (Advice with “should”)
 
-- You should abrir `http://localhost:5001` al correr local con `SERVER_PORT=5001`.
-- You should usar `http://localhost:5003` si levantas con Docker Compose.
-- You should habilitar CORS si tu frontend va a consumir el API.
+- You should open `http://localhost:5001` when running locally with `SERVER_PORT=5001`.
+- You should use `http://localhost:5003` when running via Docker Compose.
+- You should enable CORS if a frontend will consume the API.
 
-### 📚 Endpoints de ejemplo
+### 📚 Sample Endpoints
 
-| Método | Ruta             | Descripción                             |
-|--------|------------------|-----------------------------------------|
-| GET    | `/api/hello`     | Endpoint de prueba/estado del servicio. |
-| POST   | `/api/people`    | Crea un recurso Person (JSON body).     |
+| Method | Path                                            | Description                                              |
+|--------|--------------------------------------------------|----------------------------------------------------------|
+| GET    | `/api/municipalities`                           | List all municipalities.                                 |
+| GET    | `/api/municipalities/{id}`                      | Get municipality by ID (UUID).                           |
+| POST   | `/api/municipalities`                           | Create municipality.                                     |
+| PATCH  | `/api/municipalities/{id}`                      | Partially update municipality by ID.                     |
+| PUT    | `/api/municipalities/{id}`                      | Replace municipality by ID.                              |
+| DELETE | `/api/municipalities/{id}`                      | Delete municipality by ID.                               |
+| GET    | `/api/municipalities/validate/tax-id/{taxId}`   | Validate tax ID (RUC). Optional: `?excludeId=<UUID>`.    |
+| GET    | `/api/municipalities/validate/ubigeo-code/{ub}` | Validate ubigeo code. Optional: `?excludeId=<UUID>`.     |
 
-> Tip: Usa `curl`, Postman o Thunder Client para validar rápidamente el contrato de los endpoints.
+> Tip: Use `curl`, Postman, or Thunder Client to quickly validate endpoint contracts.
 
 ---
 
 ## 🎯 Future Plans (Advice & Suggestions)
 
-- We should parametrizar completamente `spring.r2dbc.url` y usar perfiles (`application-dev.yml`, `application-prod.yml`).
-- We should añadir migraciones de base de datos con Flyway/Liquibase (R2DBC compatible).
-- We should integrar observabilidad (Spring Boot Actuator, Prometheus, logs estructurados).
-- We should incrementar test coverage (WebFlux, servicios y repositorios R2DBC).
-- We should asegurar SSL con Neon y rotación de secretos (.env local + secret manager en despliegue).
-- We should documentar el contrato de `POST /api/people` (payload, validaciones, respuestas) con OpenAPI/Swagger.
+- We should fully parameterize `spring.r2dbc.url` and use profiles (`application-dev.yml`, `application-prod.yml`).
+- We should add database migrations with Flyway/Liquibase (R2DBC compatible).
+- We should integrate observability (Spring Boot Actuator, Prometheus, structured logs).
+- We should increase test coverage (WebFlux, services, and R2DBC repositories).
+- We should enforce SSL with Neon and rotate secrets (.env locally, secrets manager in prod).
+- We should document the `POST /api/people` contract (payload, validation, responses) with OpenAPI/Swagger.
 
 ---
 
@@ -109,42 +116,42 @@ API reactiva que expone endpoints y persiste datos en PostgreSQL utilizando R2DB
 
 ```text
 /cepreb
-├── Using-Imperatives/          # Spring Boot WebFlux + R2DBC backend
-│   ├── pom.xml                 # Dependencias y configuración (Java 17, Boot 3.1.5)
-│   ├── Dockerfile              # Build multi-stage para contenedor
-│   ├── docker-compose.yml      # Servicio backend y variables SPRING_R2DBC_*
+├── Using-Imperatives/          # Spring Boot WebFlux + R2DBC backend (service: vg-ms-tenantmanagmentservice)
+│   ├── pom.xml                 # Dependencies and config (Java 17, Spring Boot 3.1.5)
+│   ├── Dockerfile              # Multi-stage container build
+│   ├── docker-compose.yml      # Backend service and SPRING_R2DBC_* variables
 │   ├── src/
 │   │   ├── main/java/pe/edu/vallegrande/configurationservice/
-│   │   │   └── configurationservice.java   # Clase main
-│   │   └── main/resources/application.yml  # server.port y R2DBC config
+│   │   │   └── configurationservice.java   # Main class
+│   │   └── main/resources/application.yml  # server.port and R2DBC config
 │   └── README.md               # ← You are here
-├── docs/                       # Documentación y diagramas (opcional)
-└── .env.example                # Plantilla de variables de entorno (opcional)
+├── docs/                       # Project documentation & diagrams (optional)
+└── .env.example                # Environment variables template (optional)
 ```
 
 ---
 
 ## 🧑‍🏫 Contributing (Imperatives & Advice)
 
-- Fork del repo.
-- Crear una rama de feature:
-  - `git checkout -b feature/tu-feature`
-- Implementar, probar y lint localmente.
-- Abrir un Pull Request con resumen y descripción claros.
-- You should añadir “Fixes #<issue-number>” si está relacionado a un issue.
+- Fork this repository.
+- Create a feature branch:
+  - `git checkout -b feature/your-feature`
+- Implement, test, and lint locally.
+- Open a Pull Request with a clear summary and description.
+- You should add “Fixes #<issue-number>” if it relates to an open issue.
 
 ---
 
 ## 🚀 Deployment Requirements (Must & Need To)
 
-- You must definir variables de entorno seguras (no hardcode):
+- You must set secure environment variables (no hardcoding):
   - `SPRING_R2DBC_URL`
   - `SPRING_R2DBC_USERNAME`
   - `SPRING_R2DBC_PASSWORD`
   - `SERVER_PORT`
-- You need to habilitar CORS en la configuración de Spring para el dominio del frontend.
-- You must usar perfiles y secretos seguros en producción (no commitear `.env`).
-- You must construir la imagen o usar Compose para desplegar:
+- You need to enable CORS in Spring config for the frontend domain.
+- You must use profiles and secure secrets in production (do not commit `.env`).
+- You must build the image or use Compose to deploy:
   - `docker build -t cepreb-backend .`
   - `docker compose up --build`
 
@@ -152,21 +159,21 @@ API reactiva que expone endpoints y persiste datos en PostgreSQL utilizando R2DB
 
 ## 💡 Best Practices & Tips
 
-- You should escribir tests para WebFlux, servicios y repositorios R2DBC.
-- You should documentar endpoints y modelos con OpenAPI/Swagger.
-- You should usar `./mvnw.cmd clean` antes de empaquetar.
-- You should extraer valores sensibles a variables de entorno o un vault.
+- You should write tests for WebFlux, services, and R2DBC repositories.
+- You should document endpoints and models with OpenAPI/Swagger.
+- You should run `./mvnw.cmd clean` before packaging.
+- You should move sensitive values to environment variables or a secrets vault.
 
 ---
 
 ## 📞 Questions & Support
 
-- Abrir un issue en este repositorio.
-- Etiquetar a los líderes del proyecto para temas urgentes.
-- Unirse al canal de chat del equipo para colaboración en tiempo real.
+- Open an issue in this repository.
+- Tag the project leads for urgent matters.
+- Join the team chat for real-time collaboration.
 
 ---
 
-### 🔒 Notas de seguridad
+### 🔒 Security Notes
 
-- Si existen credenciales en archivos de configuración, muévelas a variables de entorno cuanto antes.
+- If any credentials exist in config files, move them to environment variables ASAP.
